@@ -1,7 +1,10 @@
-# Summary #
+# Lab01: Throwing and catching errors #
 This set of exercises throws errors in various ways.
 
-# Exercise 01 #
+# Exercise 01: throwing errors #
+This exercise shows throwing errors
+
+
 1. Create a series of .P's, each of which uses a different mechanism to throw an error. Make sure that the .P has the `BLOCK-LEVEL ON ERROR UNDO, THROW.` directive, to ensure that the error is thrown back to the caller.
 2. The procedures should do one of the following (ie just throw one error from each .P).
     1. `UNDO, THROW <error>`
@@ -60,7 +63,7 @@ OK   Help
 ```
 
 
-# Exercise 02 #
+# Exercise 02: Custom Errors #
 1. Open the `Lab01/CustomError.cls` class in your editor. Notice the `CalledFrom` property, that returns the program that threw the error.
 2. Open `Lab01/exercise02.p` in the editor, and modify the RUN statement to call the program created in exercise 1, that throws an instance of the CustomError. If you are using PDSOE, you may see a warning when checking syntax; please ignore this.
 3. Notice the `CATCH` block for `Lab01.CustomError`, that displays the value of the `CalledFrom` property.
@@ -88,7 +91,7 @@ OK   Help
 ---------------------------
 ```
 
-# Exercise 03 #
+# Exercise 03: AppError constructors #
 1. Create a new .P (eg Lab01/exercise03.p)
 2. Write a `CATCH` block for AppErrors that shows the caught AppError's `ReturnValue` value, the `NumMessages` value and the first message (ie `GetMessage(1)` and `GetMessageNum(1)` ).
 3. Throw a few AppErrors
@@ -105,3 +108,45 @@ OK   Help
 6. Remove (or comment out) the CATCH for AppError.
 7. Run the program. Note that only for error 3.2 do you see anything meaningful.
 
+
+# Exercise 4: re-throwing errors #
+1. Create a new .P
+2. Add an internal procedure ("ip1"), and in it, add a RUN call to one of the procedures created in exercise 2.
+3. In the internal procedure "ip1", add a `CATCH` block for `Progress.Lang.Error`; in here add a message stating name of the internal procedure.
+4. In the internal procedure "ip1", after the message, re-throw the error using the `UNDo, THROW` syntax.
+5. Add a new internal procedure "ip2". This internal procedure should run the "ip1" internal procedure, and add a `CATCH` block that is similar to the one in "ip1".
+6. In the main block, run "ip2". Add a `CATCH` block with just a message as in "ip1" and "ip2", but without the re-throw.
+
+## Results ##
+
+You should see three error messages, similar to the below. If you re-threw the error from the main block's `CATCH` there will be another error shown by the AVM.
+
+```
+---------------------------
+Message (Press HELP to view stack trace)
+---------------------------
+In ip1, caught  First Error
+---------------------------
+OK   Help
+---------------------------
+```
+
+```
+---------------------------
+Message (Press HELP to view stack trace)
+---------------------------
+In ip2, caught  First Error
+---------------------------
+OK   Help
+---------------------------
+```
+
+```
+---------------------------
+Message (Press HELP to view stack trace)
+---------------------------
+In main block, caught  First Error
+---------------------------
+OK   Help
+---------------------------
+```

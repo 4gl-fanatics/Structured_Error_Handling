@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 *******************************************************************************/
 /*------------------------------------------------------------------------
-    File        : exercise03.p
+    File        : exercise04.p
     Purpose     :
     Syntax      :
     Description :
@@ -36,57 +36,33 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 /* ***************************  Main Block  *************************** */
 
-// Error from Undo, throw.
-// modify this to use the correct file name
-RUN Lab01/avm_throws.p.
-RUN Lab01/throw_custom_class.p.
+RUN ip2.
 
-CATCH apperr AS Progress.Lang.AppError :
+CATCH err AS Progress.Lang.Error :
     MESSAGE
-    'Caught Progress.Lang.AppError' SKIP
-    'Return value: ' apperr:ReturnValue SKIP
-    'Message text: ' apperr:GetMessage(1) SKIP
-    'Message num: ' apperr:GetMessageNum(1)
-    VIEW-AS ALERT-BOX.
-
-    RUN show_error_messages(apperr).
-END CATCH.
-
-CATCH customerr AS Lab01.CustomError:
-    MESSAGE
-    'Caught Lab01.CustomError' SKIP
-    'Return value: ' customerr:ReturnValue SKIP
-    'Message text: ' customerr:GetMessage(1) SKIP
-    'Message num: ' customerr:GetMessageNum(1)
-    VIEW-AS ALERT-BOX.
-
-    RUN show_error_messages(customerr).
-END CATCH .
-
-CATCH syserr AS Progress.Lang.SysError :
-    MESSAGE
-    'Caught Progress.Lang.SysError'
-    'Message text: ' syserr:GetMessage(1) SKIP
-    'Message num: ' syserr:GetMessageNum(1)
-    VIEW-AS ALERT-BOX.
-
-    RUN show_error_messages(syserr).
-END CATCH.
-
-
-PROCEDURE show_error_messages:
-    DEFINE INPUT  PARAMETER pError AS Progress.Lang.Error NO-UNDO.
-
-    DEFINE VARIABLE iLoop AS INTEGER NO-UNDO.
-    DEFINE VARIABLE iCnt AS INTEGER NO-UNDO.
-
-    iCnt = pError:NumMessages.
-    DO iLoop = 1 TO iCnt:
-        MESSAGE
-        'Message ' iloop ' of ' iCnt SKIP
-        'Message text: ' pError:GetMessage(iLoop) SKIP
-        'Message num: ' pError:GetMessageNum(iLoop)
+        "In main block, caught " err:GetMessage(1)
         VIEW-AS ALERT-BOX.
-    END.
+END CATCH.
+
+PROCEDURE ip1:
+    RUN Lab01/throw_custom_class.p.
+
+    CATCH err AS Progress.Lang.Error :
+        MESSAGE
+        "In ip1, caught " err:GetMessage(1)
+        VIEW-AS ALERT-BOX.
+        UNDO, THROW err.
+    END CATCH.
+END PROCEDURE.
+
+PROCEDURE ip2:
+    RUN ip1.
+
+    CATCH err AS Progress.Lang.Error :
+        MESSAGE
+        "In ip2, caught " err:GetMessage(1)
+        VIEW-AS ALERT-BOX.
+        UNDO, THROW err.
+    END CATCH.
 
 END PROCEDURE.

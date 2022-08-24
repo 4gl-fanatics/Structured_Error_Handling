@@ -40,12 +40,11 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 /* ***************************  Main Block  *************************** */
 
-// Error from Undo, throw.
 //RUN Lab01/undo_throw.p.
 //RUN Lab01/return_error_new.p.
 //RUN Lab01/return_error_obj.p.
 //RUN Lab01/avm_throws.p.
-RUN Lab01/avm_throws.p NO-ERROR .
+//RUN Lab01/avm_throws.p NO-ERROR .
 //RUN Lab01/return_error_character.p.
 //RUN Lab01/throw_custom_class.p.
 
