@@ -69,28 +69,12 @@ OK   Help
 ```
 
 
-
-
-https://github.com/progress/ADE/blob/release-12.5.x/corelib/OpenEdge/Logging/Format/ErrorFormat.cls
-
-WriteStack method
-https://github.com/progress/ADE/blob/913533dd12f3c1944b13e126e647b07d4bc99274/corelib/OpenEdge/Logging/Format/ErrorFormat.cls#L132
-
-InnerError
-https://github.com/progress/ADE/blob/913533dd12f3c1944b13e126e647b07d4bc99274/corelib/OpenEdge/Logging/Format/ErrorFormat.cls#L116
-
-InnerStop
-https://github.com/progress/ADE/blob/913533dd12f3c1944b13e126e647b07d4bc99274/corelib/OpenEdge/Logging/Format/ErrorFormat.cls#L91
-
 # Exercise 2: "Stop errors" #
 
 1. Create a .P that runs a non-existent .P
 2. Add a `CATCH` block and message the error type - using `err` or `err:ToString()` and the first message. You should see an error 293 for the message.
 3. The type you are catching can be `Progress.Lang.Error` or `Progress.Lang.StopError` , even though the latter does not really add anything.
 4. If you now run with `-catchStop 0` on the command-line, the "classic" behaviour applies and you will now see your message, but rather a standard OpenEdge message.
-
-
-
 
 
 # Exercise 3: Stop conditions, user interrupts and lock waits #
@@ -120,23 +104,3 @@ https://github.com/progress/ADE/blob/913533dd12f3c1944b13e126e647b07d4bc99274/co
 - Using `NO-WAIT` in the query disables the lock wait timeout
 
 
-
-
-https://docs.progress.com/bundle/openedge-startup-and-parameter-reference/page/Lock-Timeout-lkwtmo.html?labelkey=product_openedge_125
-
-Use -lkwtmo 10 (min val)
-
-
-
-https://docs.progress.com/bundle/abl-reference/page/Progress.Lang.LockConflict-class.html
-
-https://docs.progress.com/bundle/abl-reference/page/Progress.Lang.UserInterrupt-class.html
-
-Not implementing Progress.Lang.Error
-Progress.Lang.Stop              - STOP Statement
-Progress.Lang.LockConflict      - -lkwtmo exceeded
-Progress.Lang.StopAfter         - STOP-AFTER exceeded
-Progress.Lang.UserInterrrupt    - CTRL-BREAK
-
-Progress.Lang.SysError derived (ABL runtime error)
-Progress.Lang.StopError         - RUN invalid.p, etc.
