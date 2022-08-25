@@ -22,30 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 *******************************************************************************/
  /*------------------------------------------------------------------------
-    File        : CustomError
+    File        : BadThingError
     Purpose     :
     Syntax      :
     Description :
     Author(s)   : Peter
-    Created     : Tue Aug 23 16:04:30 EDT 2022
+    Created     : Wed Aug 24 14:25:20 EDT 2022
     Notes       :
   ----------------------------------------------------------------------*/
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Lab01.CustomError INHERITS Progress.Lang.AppError:
-    /** Returns the program that raised this error **/
-    DEFINE PUBLIC PROPERTY CalledFrom AS CHARACTER NO-UNDO
-        GET.
-        PRIVATE SET.
+CLASS Lab03.BadThingError INHERITS Progress.Lang.AppError:
 
-    CONSTRUCTOR PUBLIC CustomError ( ):
-        SUPER ('custom_error').
+    DEFINE PUBLIC PROPERTY InnerError AS Progress.Lang.Error NO-UNDO
+    GET.
+    SET.
 
-        THIS-OBJECT:AddMessage('First Error', 10).
-        THIS-OBJECT:AddMessage('Second Error', 20).
-
-        THIS-OBJECT:CalledFrom = PROGRAM-NAME(2).
+    CONSTRUCTOR PUBLIC BadThingError(INPUT pError AS Progress.Lang.Error):
+        ASSIGN THIS-OBJECT:InnerError = pError
+               THIS-OBJECT:ReturnValue = 'Whoops'
+               .
+        AddMessage('A bad thing happened!', -42).
     END CONSTRUCTOR.
+
+    METHOD OVERRIDE PUBLIC CHARACTER ToString():
+        RETURN SUBSTITUTE("&1 Cause: &2",
+                         THIS-OBJECT:GetMessage(1),
+                         THIS-OBJECT:InnerError:GetMessage(1)).
+    END METHOD.
 
 END CLASS.
